@@ -1,0 +1,350 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body{
+  background-color: black;
+   background-image: url("bilder/backgroundv9.png");
+   background-size: cover;
+   min-width: 100%;
+   font-family: 'Chakra Petch', sans-serif;
+   color: #7bff7a;
+   background-repeat: no-repeat;
+}
+.square1 {
+  padding-top: 14.8%; /* Aspect Ratio */
+  width: 22.5%;
+  position: absolute;
+  top: 10.1%;
+  left: 37.1%;
+  font-size: 10%;
+}
+.square2 {
+  padding-top: 6.1%; /* Aspect Ratio */
+  width: 11.7%;
+  position: absolute;
+  top: 28.5%;
+  left: 30%;
+  font-size: 10%;
+}
+.square3 {
+  padding-top: 2.2%; /* Aspect Ratio */
+  width: 8.6%;
+  position: absolute;
+  top: 28.3%;
+  left: 56.4%;
+  font-size: 10%;
+}
+.container {
+  padding-top: 100%; /* Aspect Ratio */
+  width: 100%;
+  position: fixed;
+}
+.osb {
+  padding-top: 1%; /* Aspect Ratio */
+  width: 1.7%;
+  position: absolute;
+}
+.osb:hover {
+  cursor: pointer;
+}
+#previouspage {
+  padding-top: 1.6%; /* Aspect Ratio */
+  width: 8%;
+  position: absolute;
+  top: 0%;
+  left: 1.2%;
+  cursor: pointer;
+}
+#close {
+  padding-top: 1.6%; /* Aspect Ratio */
+  width: 9.4%;
+  position: absolute;
+  top: 0%;
+  left: 10%;
+  cursor: pointer;
+}
+#nextpage {
+  padding-top: 1.6%; /* Aspect Ratio */
+  width: 7.7%;
+  position: absolute;
+  top: 0%;
+  left: 20.8%;
+  cursor: pointer;
+}
+#pinkbook {
+  padding-top: 7%; /* Aspect Ratio */
+  width: 12.6%;
+  position: absolute;
+  top: 45%;
+  left: 12.4%;
+  cursor: pointer;
+}
+#bigreddiv {
+  padding-top:8.6%; /* Aspect Ratio */
+  width: 12%;
+  position: absolute;
+  top: 25.3%;
+  left: 43%;
+  font-size: 10%;
+  z-index:200;
+  cursor: pointer;
+}
+#deathgif{
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 1000
+}
+#bigredidup{
+  padding-top: 2.2%; /* Aspect Ratio */
+  width: 13.1%;
+  position: absolute;
+  top: 22.2%;
+  left: 42.53%;
+}
+#clockblood{
+  width: 10.3%;
+  padding-top: 11.3%; /* Aspect Ratio */
+  border-radius: 50%;
+  top: 29%;
+  left: 71.5%;
+  position: absolute;
+}
+#bigrediddown{
+  padding-top: 2.2%; /* Aspect Ratio */
+  width: 13.1%;
+  position: absolute;
+  top: 23.3%;
+  left: 42.53%;
+}
+#soulstekstid {
+  position: absolute;
+  top: 3%;
+  width: 100%;
+  text-align: left;
+  font-size: 1vw;
+  line-height: 1vw;
+  margin-left: 0.3vw;
+}
+#resourcestekstid{
+  position: absolute;
+  top: 10%;
+  width: 100%;
+  text-align: left;
+  font-size: 1vw;
+  line-height: 1vw;
+  margin-left: 0.3vw;
+}
+#resourcestekstid2{
+  position: absolute;
+  top: 10%;
+  width: 100%;
+  text-align: left;
+  font-size: 1vw;
+  line-height: 1vw;
+  margin-left: 5.2vw;
+}
+#mfdtopleft{
+  position: absolute;
+  top: 0%;
+  width: 100%;
+  text-align: left;
+  font-size: 1.01vw;
+  line-height: 1.8vw;
+  margin-left: 0.4vw;
+}
+#mfdcenter{
+  position: absolute;
+  top: 0%;
+  width: 102%;
+  text-align: center;
+  font-size: 1.01vw;
+  line-height: 1.8vw;
+  margin-left: 0.4vw;
+}
+#mfdleft{
+  position: absolute;
+  top: 10%;
+  width: 100%;
+  text-align: left;
+  font-size: 1.01vw;
+  line-height: 1.82vw;
+  margin-left: 0.4vw;
+}
+#mfdbottomleft{
+  position: absolute;
+  top: 2%;
+  width: 100%;
+  text-align: left;
+  font-size: 1.01vw;
+  line-height: 1.8vw;
+  margin-left: 0.4vw;
+}
+#mfdtopright{
+  position: absolute;
+  top: 0%;
+  width: 100%;
+  text-align: right;
+  font-size: 1.01vw;
+  line-height: 1.8vw;
+  margin-left: 0.4vw;
+}
+#mfdright{
+  position: absolute;
+  top: 10%;
+  width: 100%;
+  text-align: right;
+  font-size: 1.01vw;
+  line-height: 1.82vw;
+  margin-left: 0.4vw;
+}
+#mfdbottomright{
+  position: absolute;
+  top: 2%;
+  width: 100%;
+  text-align: right;
+  font-size: 1.01vw;
+  line-height: 1.8vw;
+  margin-left: 0.4vw;
+}
+#osb1{
+  top: 7.8%;
+  left: 40.5%;
+}
+#osb2{
+  top: 7.8%;
+  left: 43.5%;
+}
+#osb3{
+  top: 7.8%;
+  left: 46.3%;
+}
+#osb4{
+  top: 7.8%;
+  left: 49.3%;
+}
+#osb5{
+  top: 7.9%;
+  left: 52.1%;
+}
+#osb6{
+  top: 7.9%;
+  left: 55%;
+}
+#osb7{
+  top: 12%;
+  left: 61.4%;
+}
+#osb8{
+  top: 13.8%;
+  left: 61.4%;
+}
+#osb9{
+  top: 15.6%;
+  left: 61.4%;
+}
+#osb10{
+  top: 17.4%;
+  left: 61.4%;
+}
+#osb11{
+  top: 19.2%;
+  left: 61.4%;
+}
+#osb12{
+  top: 21%;
+  left: 61.4%;
+}
+#osb13{
+  top: 25.8%;
+  left: 55%;
+  z-index: 150;
+}
+#osb14{
+  top: 21%;
+  left: 33.8%;
+}
+#osb15{
+  top: 19.2%;
+  left: 33.8%;
+}
+#osb16{
+  top: 17.4%;
+  left: 33.8%;
+}
+#osb17{
+  top: 15.6%;
+  left: 33.8%;
+}
+#osb18{
+  top: 13.8%;
+  left: 33.8%;
+}
+#osb19{
+  top: 12%;
+  left: 33.8%;
+}
+#bigred{
+  padding-top: 9%; /* Aspect Ratio */
+  width: 12%;
+  position: absolute;
+  top: 25.3%;
+  left: 43%;
+}
+#bigred:hover {
+  cursor: pointer;
+}
+.klokke{
+  width: 9.3%;
+  padding-top: 9.3%; /* Aspect Ratio */
+  border-radius: 50%;
+  top: 39%;
+  left: 72.55%;
+  position: absolute;
+}
+.klokke:hover{
+  cursor:pointer;
+}
+.klokke .hand {
+  --rotere: 0;
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  border-top-left-radius: 0.1vw;
+  border-top-right-radius:  0.1vw;
+  transform-origin: bottom;
+  z-index: 10;
+  transform: translateX(-50%) rotate(calc(var(--rotere)*1deg));
+}
+
+.klokke::after {
+  content: '';
+  position: absolute;
+  background-color: black;
+  z-index:11;
+  width: 0.1vw;
+  height: 0.1vw;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+.klokke .hand.sekund {
+  width: 0.1vw;
+  height: 45%;
+  background-color: black;
+}
+
+.klokke .hand.minutt {
+  width: 0.15vw;
+  height: 40%;
+  background-color: black;
+}
+
+.klokke .hand.time {
+  width: 0.2vw;
+  height: 30%;
+  background-color: black;
+}

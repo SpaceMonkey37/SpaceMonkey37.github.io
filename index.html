@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <ameta http-equiv="refresh" content="1">
+  </head>
+  <body>
+    <head>
+      <link rel="stylesheet" href="stilark.css">
+      <script src="mfdsetup.js"></script>
+      <script src="assets.js"></script>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch&display=swap" rel="stylesheet">
+    </head>
+    <img id="deathgif" src="bilder/death.gif">
+    <div class="container">
+      <img id="bigredidup" src="bilder/bigred.png" >
+      <img id="bigrediddown" src="bilder/bigred.png">
+      <img id="clockblood" src="bilder/clockblood.png">
+      <div id="bigreddiv" onclick="bigredclick()"></div>
+      <div class="klokke" onclick="armageddonclick();">
+        <div class="hand time" data-hour-hand></div>
+        <div class="hand minutt" data-minute-hand></div>
+        <div class="hand sekund" data-second-hand></div>
+      </div>
+      <div class="square1">
+        <div id="mfdcenter"></div>
+        <div id="mfdtopleft"></div>
+        <div id="mfdleft"></div>
+        <div id="mfdbottomleft"></div>
+        <div id="mfdtopright"></div>
+        <div id="mfdright"></div>
+        <div id="mfdbottomright"></div>
+      </div>
+      <div class="square2">
+        <div id="resourcestekstid"></div>
+        <div id="resourcestekstid2"></div>
+      </div>
+      <div class="square3">
+        <div id="soulstekstid"></div>
+      </div>
+      <div class="osb" id="osb1" onclick="osb1fun();"></div>
+      <div class="osb" id="osb2" onclick="osb2fun();"></div>
+      <div class="osb" id="osb3" onclick="osb3fun();"></div>
+      <div class="osb" id="osb4" onclick="osb4fun();"></div>
+      <div class="osb" id="osb5" onclick="osb5fun();"></div>
+      <div class="osb" id="osb6" onclick="osb6fun();"></div>
+      <div class="osb" id="osb7" onclick="osb7fun();"></div>
+      <div class="osb" id="osb8" onclick="osb8fun();"></div>
+      <div class="osb" id="osb9" onclick="osb9fun();"></div>
+      <div class="osb" id="osb10" onclick="osb10fun();"></div>
+      <div class="osb" id="osb11" onclick="osb11fun();"></div>
+      <div class="osb" id="osb12" onclick="osb12fun();"></div>
+      <div class="osb" id="osb13" onclick="osb13fun();"></div>
+      <div class="osb" id="osb14" onclick="osb14fun();"></div>
+      <div class="osb" id="osb15" onclick="osb15fun();"></div>
+      <div class="osb" id="osb16" onclick="osb16fun();"></div>
+      <div class="osb" id="osb17" onclick="osb17fun();"></div>
+      <div class="osb" id="osb18" onclick="osb18fun();"></div>
+      <div class="osb" id="osb19" onclick="osb19fun();"></div>
+      <div id="pinkbook" onclick="pinkbookfun();"></div>
+      <div id="previouspage" onclick="previouspagefun();"></div>
+      <div id="close" onclick="closefun();"></div>
+      <div id="nextpage" onclick="nextpagefun();"></div>
+
+    </div>
+  </body>
+</html>
+<script>
+document.getElementById("previouspage").style.display = "none";
+document.getElementById("close").style.display = "none";
+document.getElementById("nextpage").style.display = "none";
+document.getElementById("deathgif").style.display = "none";
+document.getElementById("bigrediddown").style.display = "none";
+document.querySelectorAll("button").forEach( function(item) {
+  item.addEventListener('focus', function() {
+    this.blur();
+  })
+})
+
+var persek = 100;
+var end = false;
+var clickAmount = 1;
+var soulsAmount = 0;
+var metalAmount = 0;
+var oilAmount = 0;
+var uraniumAmount = 0;
+var countdown = 20;
+var minerigang = false;
+var oilpumpigang = false;
+var drilligang = false;
+var oilrigigang = false;
+var uminerigang = false;
+var armageddonfun = false;
+var clickmax = false;
+var type = 0;
+var tempsouls = 0;
+var maxtimes = 0;
+var bookpage = 1;
+var mfd1check=false;
+var mfd2check=false;
+var mfd3check=false;
+var mfd4check=false;
+var mfd5check=false;
+var mfd6check=false;
+var mfd7check=false;
+var mfd8check=false;
+
+var hours = 2;
+var minutes = 54;
+var seconds = 21;
+
+//endre verdier i spillet (balance)
+var exponentialtall = 2; //, hvor mye dyrer oppgraderinger blir.
+var increasevar = 1.5; //hvor mange ganger dyrere personnel blir per amount
+var soulsupdatepercent = 30000; //hvor mye av tempsouls som skal bli overført hver soulsupdate, større tall betyr lengere telletid.
+var soulsupdateint = 1000; //antall soulsupdates per sekund
+var upgradeprice = 4;
+
+
+let m1a2 = new Assets("M1A2" /*assetType*/, 0 /*amount, default 0*/, 0 /*leve, default 0l*/, 8 /*souls,lethality/price*/, 81  /*PRICEmetal*/, 47 /*PRICEoil*/, 0 /*PRICEuranium*/, 160 * upgradeprice /*soulsUpgradeCost*/, 8 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/);
+let a10 = new Assets("A-10" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 26 /*souls,lethality/price*/, 67  /*PRICEmetal*/, 134 /*PRICEoil*/, 0 /*PRICEuranium*/, 190 * upgradeprice /*soulsUpgradeCost*/, 10 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/);
+let b52 = new Assets("B-52" /*assetType*/, 0 /*amount, default 0*/, 0 /*leve, default 0l*/, 840 /*souls,lethality/price*/, 1800  /*PRICEmetal*/, 2500 /*PRICEoil*/, 0 /*PRICEuranium*/, 3700 * upgradeprice /*soulsUpgradeCost*/,  180 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/);
+let titan1 = new Assets("TITAN I" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 5000 /*souls,lethality/price*/, 8700  /*PRICEmetal*/, 9876 /*PRICEoil*/, 300 /*PRICEuranium*/, 15632 * upgradeprice /*soulsUpgradeCost*/, 750 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/);
+let lgm30 = new Assets("LGM-30" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 30000 /*souls,lethality/price*/, 26231  /*PRICEmetal*/, 25631 /*PRICEoil*/, 1800 /*PRICEuranium*/, 49871 * upgradeprice /*soulsUpgradeCost*/, 2500 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/);
+
+let miner = new Assets("MINER" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 10 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 160 * upgradeprice /*soulsUpgradeCost*/, 8 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "METAL" /*harvest type*/, 1 /*amount gathered per sec*/);
+let oilpump = new Assets("OIL-PUMP" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 15 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 228 * upgradeprice /*soulsUpgradeCost*/, 11 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "OIL" /*harvest type*/, 1 /*amount gathered per sec*/);
+let drill = new Assets("DRILL" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 22 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 402 * upgradeprice /*soulsUpgradeCost*/, 20 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "METAL" /*harvest type*/, 3 /*amount gathered per sec*/);
+let oilrig = new Assets("OIL-RIG" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 32 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 521 * upgradeprice /*soulsUpgradeCost*/, 260 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "OIL" /*harvest type*/, 3 /*amount gathered per sec*/);
+let uminer = new Assets("U-MINER" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 50 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 871 * upgradeprice /*soulsUpgradeCost*/, 450 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "URANIUM" /*harvest type*/, 1 /*amount gathered per sec*/);
+
+assets = m1a2;
+
+
+let mfd1 = 0;
+let mfd2 = 0;
+let mfd3 = 0;
+let mfd4 = 0;
+let mfd5 = 0;
+let mfd6 = 0;
+let mfdtask = 0;
+
+objects();
+function objects() {
+  mfd1 = new MfdSetup("ARMORY", "SOULS: " + parseFloat(soulsAmount).toFixed(0), "- " + m1a2.assetType + ": " + m1a2.amount, "- " + a10.assetType + ": " + a10.amount, "- " + b52.assetType + ": " + b52.amount, "- " + titan1.assetType + ": " + titan1.amount, "- " + lgm30.assetType + ": " + lgm30.amount, "ARSENAL", "PERSONNEL", "", m1a2.assetType + "(LVL" + (m1a2.level) + ")" + " -", a10.assetType + "(LVL" + (a10.level) + ")" + " -", b52.assetType + "(LVL" + (b52.level) + ")" + " -", titan1.assetType + "(LVL" + (titan1.level) + ")" + " -", lgm30.assetType + "(LVL" + (lgm30.level) + ")" + " -", "PURCHASE", "TASK EXTRA", "", "", "ARMORY");
+  mfd2 = new MfdSetup("ARMORY", "SOULS: " + parseFloat(soulsAmount).toFixed(0), "- " + miner.assetType + ": " + miner.amount, "- " + oilpump.assetType + ": " + oilpump.amount, "- " + drill.assetType + ": " + drill.amount, "- " + oilrig.assetType + ": " + oilrig.amount, "- " + uminer.assetType + ": " + uminer.amount, "ARSENAL", "PERSONNEL", "", miner.assetType + "(LVL" + (miner.level) + ")" + " -", oilpump.assetType + "(LVL" + (oilpump.level) + ")" + " -", drill.assetType + "(LVL" + (drill.level) + ")" + " -", oilrig.assetType + "(LVL" + (oilrig.level) + ")" + " -", uminer.assetType + "(LVL" + (uminer.level) + ")" + " -", "PURCHASE", "TASK EXTRA", "", "", "PERSONNEL");
+  mfd3 = new MfdSetup("ARMORY", "SOULS: " + parseFloat(soulsAmount).toFixed(0), "- " + m1a2.assetType + "(LVL" + (m1a2.level) + ")", "- " + a10.assetType + "(LVL" + (a10.level) + ")", "- " + b52.assetType + "(LVL" + (b52.level) + ")", "- " + titan1.assetType + "(LVL" + (titan1.level) + ")", "- " + lgm30.assetType + "(LVL" + (lgm30.level) + ")", "ARMORY", "PERSONNEL", "", miner.assetType + "(LVL" + (miner.level) + ")" + " -", oilpump.assetType + "(LVL" + (oilpump.level) + ")" + " -", drill.assetType + "(LVL" + (drill.level) + ")" + " -", oilrig.assetType + "(LVL" + (oilrig.level) + ")" + " -", uminer.assetType + "(LVL" + (uminer.level) + ")" + " -", "PERSONNEL", "TASK EXTRA", "", "", "UPGRADES");
+  mfd4 = new MfdSetup("ARMORY", "SOULS: " + parseFloat(soulsAmount).toFixed(0), "- RETURN", "LETHALITY: " + Number.parseFloat(assets.souls).toExponential(2), "UNIT COST:", "METAL " + Number.parseFloat(assets.metal).toExponential(2), "OIL " + Number.parseFloat(assets.oil).toExponential(2), "", "PERSONNEL", "", "UPGRADE COST (LVL" + (assets.level + 1) + "):", "SOULS " + Number.parseFloat(assets.soulsupgrade).toExponential(2), "URANIUM " + Number.parseFloat(assets.uraniumupgrade).toExponential(2), "", "LETHALITY (LVL" + (assets.level + 1) + "):", "", assets.assetType + "(LVL" + (assets.level) + ")", "URANIUM: " + Number.parseFloat(assets.uranium).toExponential(2), Number.parseFloat(assets.souls*assets.upgrade).toExponential(2), "");
+  mfd5 = new MfdSetup("ARMORY", "SOULS: " + parseFloat(soulsAmount).toFixed(0), "- RETURN", "UNIT COST:", Number.parseFloat(assets.souls).toExponential(2) + " SOULS", "EFFICIENCY:", Number.parseFloat(assets.efficiency).toExponential(2) + " " + assets.harvest + " P/S", "P/S=PER SEC", "PERSONNEL", "", "UPGRADE COST (LVL" + (assets.level + 1) + "):", "SOULS " + Number.parseFloat(assets.soulsupgrade).toExponential(2), "URANIUM " + Number.parseFloat(assets.uraniumupgrade).toExponential(2), "", "EFFICIENCY (LVL" + (assets.level + 1) + "):", "", assets.assetType + "(LVL" + (assets.level) + ")", "", Number.parseFloat(assets.efficiency*assets.upgrade).toExponential(2) + " " + assets.harvest + " P/S", "");
+  mfd6 = new MfdSetup("ARMORY", "SOULS: " + parseFloat(soulsAmount).toFixed(0), "", "METAL PER CLICK:", Number.parseFloat(miner.efficiency * 10).toExponential(2), "OIL PER CLICK:", Number.parseFloat(oilpump.efficiency * 10).toExponential(2), "ARMORY UNIT COST +50% PER LVL.", "PERSONNEL", "", "ARMORY UNITS PER CLICK (" + clickAmount + "):", "1 -", "10 -", "100 -", "MAX -", "", "TASK EXTRA", "", "", "");
+  mfd7 = new MfdSetup("ARMORY", "leftline2", "leftline3", "leftline4", "leftline5", "leftline6", "leftline7", "leftline8", "PERSONNEL", "rightline2", "rightline3", "rightline4", "rightline5", "rightline6", "rightline7", "rightline8", "center", "leftlinestat", "rightlinestat", "");
+  mfdtask = new MfdSetup("ARMORY", "LOCATION: UNKNOWN", "INTEL: THE RUSSIAN NUCLEAR STRIKE HIT", "[" + hours + " HOURS - " + minutes + " MIUNTES - " + seconds + " SECONDS] AGO.", "ALL US CIVILIANS PERSUMED DEAD.", "TASK: RETALIATE WITH FORCE.", "GOOD LUCK MR. PRESIDENT.", "TIME IS THE ENEMY.", "PERSONNEL", "", "", "", "", "", "", "", "TASK EXTRA", "", "", "");
+}
+
+mfdsetup = mfdtask;
+mfdtaskcheck = true;
+
+
+souls();
+resources();
+mfd();
+timesince();
+
+function timesince() {
+  setTimeout(function() {
+    seconds ++;
+    if (seconds == 60) {
+      seconds = 0;
+      minutes ++;
+    }
+    if (minutes == 60) {
+      minutes = 0,
+      hours ++;
+    }
+    objects();
+    if (mfdtaskcheck) {
+      mfdsetup = mfdtask
+      mfd();
+    }
+    timesince();
+  }, 1000);
+}
+
+function minerfun() {
+  if (!end) {
+    if(miner.amount > 0) {
+      minerigang = true;
+      setTimeout(function() {
+        metalAmount += (miner.efficiency / persek) * miner.amount;
+        objects();
+        resources();
+        minerfun();
+      }, 1000/persek);
+    }
+  }
+}
+
+function oilpumpfun() {
+  if (!end) {
+    if(oilpump.amount > 0) {
+      oilpumpigang = true;
+      setTimeout(function() {
+        oilAmount += (oilpump.efficiency / persek) * oilpump.amount;
+        objects();
+        resources();
+        oilpumpfun();
+      }, 1000/persek);
+    }
+  }
+}
+
+function drillfun() {
+  if (!end) {
+    if(drill.amount > 0) {
+      drilligang = true;
+      setTimeout(function() {
+        metalAmount += (drill.efficiency / persek) * drill.amount;
+        objects();
+        resources();
+        drillfun();
+      }, 1000/persek);
+    }
+  }
+}
+
+function oilrigfun() {
+  if (!end) {
+    if(oilrig.amount > 0) {
+      oirigigang = true;
+      setTimeout(function() {
+        oilAmount += (oilrig.efficiency / persek) * oilrig.amount;
+        objects();
+        resources();
+        oilrigfun();
+      }, 1000/persek);
+    }
+  }
+}
+
+function uminerfun() {
+  if (!end) {
+    if (!uminerigang) {
+      uminerdeath();
+    }
+    if(uminer.amount > 0) {
+      uminerigang = true;
+      setTimeout(function() {
+        uraniumAmount += (uminer.efficiency / persek) * uminer.amount;
+        objects();
+        resources();
+        uminerfun();
+      }, 1000/persek);
+    }
+    else if (uminer.amount == 0) {
+      uminerigang = false;
+    }
+  }
+}
+
+function uminerdeath() {
+  setTimeout(function() {
+    uminer.amount += -1;
+    tempsouls ++;
+    soulsupdate();
+    uminer.souls = uminer.souls / increasevar;
+    if (mfd2check) {
+      objects();
+      mfdsetup = mfd2;
+      mfd();
+    }
+    if (mfd5check) {
+      objects();
+      mfdsetup = mfd5;
+      mfd();
+    }
+    if (uminer.amount > 0) {
+      uminerdeath();
+    }
+  }, 300000);
+}
+
+function osb1fun() {
+  if (!end) {
+    mfdsetup = mfd1;
+    mfd1check = true;
+    mfd2check = false;
+    mfd3check = false;
+    mfd4check = false;
+    mfd5check = false;
+    mfd6check = false;
+    mfd7check = false;
+    mfd8check = false;
+    mfdtaskcheck = false;
+    mfd();
+  }
+}
+
+function osb2fun() {
+  if (!end) {
+
+  }
+}
+
+function osb3fun() {
+  if (!end) {
+    if(mfd1check||mfd2check||mfd3check||mfd6check) {
+      mfd1check = false;
+      mfd2check = false;
+      mfd3check = false;
+      mfd4check = false;
+      mfd5check = false;
+      mfd6check = false;
+      mfd7check = false;
+      mfd8check = false;
+      mfdtaskcheck = true;
+      mfdsetup = mfdtask;
+      objects();
+      mfd();
+    }
+  }
+}
+
+function osb4fun() {
+  if (!end) {
+    if(!mfd4check && !mfd5check) {
+      mfd1check = false;
+      mfd2check = false;
+      mfd3check = false;
+      mfd4check = false;
+      mfd5check = false;
+      mfd6check = true;
+      mfd7check = false;
+      mfd8check = false;
+      mfdtaskcheck = false;
+      mfdsetup = mfd6;
+      mfd();
+    }
+  }
+}
+
+function osb5fun() {
+  if (!end) {
+
+  }
+}
+
+function osb6fun() {
+  if (!end) {
+    mfdsetup = mfd2;
+    mfd1check = false;
+    mfd2check = true;
+    mfd3check = false;
+    mfd4check = false;
+    mfd5check = false;
+    mfd6check = false;
+    mfd7check = false;
+    mfd8check = false;
+    mfdtaskcheck = false;
+    mfd();
+  }
+}
+
+function osb7fun() {
+  if (!end) {
+    metalAmount += miner.efficiency * 10;
+    resources();
+  }
+}
+
+function osb8fun() {
+  if (!end) {
+    if (mfd1check) {
+      assets = m1a2;
+      purchasefun();
+    }
+    else if (mfd2check) {
+      assets = miner;
+      if (soulsAmount >= assets.souls) {
+        purchasefun2();
+        if (!minerigang) {
+          minerfun();
+        }
+      }
+    }
+    else if (mfd3check) {
+      assets = miner;
+      personnelupgrade();
+    }
+    else if (mfd6check) {
+
+    }
+    else if (mfd7check) {
+
+    }
+  }
+}
+
+function osb9fun() {
+  if (!end) {
+    if (mfd1check) {
+      assets = a10;
+      purchasefun();
+    }
+    if (mfd2check) {
+      assets = oilpump;
+      if (soulsAmount >= assets.souls) {
+        purchasefun2();
+        if (!oilpumpigang) {
+          oilpumpfun();
+        }
+      }
+    }
+    else if (mfd3check) {
+      assets = oilpump;
+      personnelupgrade();
+    }
+    else if (mfd6check) {
+      clickAmount = 1;
+      clickmax = false;
+      objects();
+      mfdsetup = mfd6;
+      mfd();
+    }
+    else if (mfd7check) {
+
+    }
+  }
+}
+
+function osb10fun() {
+  if (!end) {
+    if (mfd1check) {
+      assets = b52;
+      purchasefun();
+    }
+    if (mfd2check) {
+      assets = drill;
+      if (soulsAmount >= assets.souls) {
+        purchasefun2();
+        if (!drilligang) {
+          drillfun();
+        }
+      }
+    }
+    else if (mfd3check) {
+      assets = drill;
+      personnelupgrade();
+    }
+    else if (mfd6check) {
+      clickAmount = 10;
+      clickmax = false;
+      objects();
+      mfdsetup = mfd6;
+      mfd();
+    }
+    else if (mfd7check) {
+
+    }
+  }
+}
+
+function osb11fun() {
+  if (!end) {
+    if (mfd1check) {
+      assets = titan1;
+      purchasefun();
+    }
+    if (mfd2check) {
+      assets = oilrig;
+      if (soulsAmount >= assets.souls) {
+        purchasefun2();
+        if (!oilrigigang) {
+          oilrigfun();
+        }
+      }
+    }
+    else if (mfd3check) {
+      assets = oilrig;
+      personnelupgrade();
+    }
+    else if (mfd6check) {
+      clickAmount = 100;
+      clickmax = false;
+      objects();
+      mfdsetup = mfd6;
+      mfd();
+    }
+    else if (mfd7check) {
+
+    }
+  }
+}
+
+function osb12fun() {
+  if (!end) {
+    if (mfd1check) {
+      assets = lgm30;
+      purchasefun();
+    }
+    if (mfd2check) {
+      assets = uminer;
+      if (soulsAmount >= assets.souls) {
+        purchasefun2();
+        if (!uminerigang) {
+          uminerfun();
+        }
+      }
+    }
+    else if (mfd3check) {
+      assets = uminer;
+      personnelupgrade();
+    }
+    else if (mfd6check) {
+      clickAmount = "MAX";
+      clickmax = true;
+      objects();
+      mfdsetup = mfd6;
+      mfd();
+    }
+    else if (mfd7check) {
+
+    }
+  }
+}
+
+function osb13fun() {
+  if (!end) {
+    mfdsetup = mfd3;
+    mfd1check = false;
+    mfd2check = false;
+    mfd3check = true;
+    mfd4check = false;
+    mfd5check = false;
+    mfd6check = false;
+    mfd7check = false;
+    mfd8check = false;
+    mfdtaskcheck = false;
+    mfd();
+  }
+}
+
+function osb14fun() {
+  if (!end) {
+    if (mfd1check) {
+      type = lgm30;
+      stats();
+    }
+    else if (mfd2check) {
+      assets = uminer;
+      objects();
+      mfdsetup = mfd5;
+      mfd();
+      mfd5checkfun();
+    }
+    else if (mfd3check) {
+      assets = lgm30;
+      armoryupgrade();
+    }
+    else if (mfd4check) {
+
+    }
+    else if (mfd5check) {
+
+    }
+  }
+}
+
+function osb15fun() {
+  if (!end) {
+    if (mfd1check) {
+      type = titan1;
+      stats();
+    }
+    else if (mfd2check) {
+      assets = oilrig;
+      objects();
+      mfdsetup = mfd5;
+      mfd();
+      mfd5checkfun();
+    }
+    else if (mfd3check) {
+      assets = titan1;
+      armoryupgrade();
+    }
+    else if (mfd6check) {
+
+    }
+    else if (mfd7check) {
+
+    }
+  }
+}
+
+function osb16fun() {
+  if (!end) {
+    if (mfd1check) {
+      type = b52;
+      stats();
+    }
+    else if (mfd2check) {
+      assets = drill;
+      objects();
+      mfdsetup = mfd5;
+      mfd();
+      mfd5checkfun();
+    }
+    else if (mfd3check) {
+      assets = b52;
+      armoryupgrade();
+    }
+    else if (mfd6check) {
+
+    }
+    else if (mfd7check) {
+
+    }
+  }
+}
+
+function osb17fun() {
+  if (!end) {
+    if (mfd1check) {
+      type = a10;
+      stats();
+    }
+    else if (mfd2check) {
+      assets = oilpump;
+      objects();
+      mfdsetup = mfd5;
+      mfd();
+      mfd5checkfun();
+    }
+    else if (mfd3check) {
+      assets = a10;
+      armoryupgrade();
+    }
+    else if (mfd6check) {
+
+    }
+    else if (mfd7check) {
+
+    }
+  }
+}
+
+function osb18fun() {
+  if (!end) {
+    if (mfd1check) {
+      type = m1a2;
+      stats();
+    }
+    else if (mfd2check) {
+      assets = miner;
+      objects();
+      mfdsetup = mfd5;
+      mfd();
+      mfd5checkfun();
+    }
+    else if (mfd3check) {
+      assets = m1a2;
+      armoryupgrade();
+    }
+    else if (mfd4check) {
+      osb1fun();
+    }
+    else if (mfd5check) {
+      osb6fun();
+    }
+  }
+}
+
+function osb19fun() {
+  if (!end) {
+    oilAmount += oilpump.efficiency * 10;
+    resources();
+  }
+}
+
+function personnelupgrade() {
+  if(soulsAmount >= assets.soulsupgrade && uraniumAmount >= assets.uraniumupgrade) {
+      soulsAmount += -assets.soulsupgrade;
+      uraniumAmount += -assets.uraniumupgrade;
+      assets.level ++;
+      assets.efficiency = assets.efficiency * assets.upgrade;
+      assets.soulsupgrade = assets.soulsupgrade * exponentialtall;
+      assets.uraniumupgrade = assets.uraniumupgrade * exponentialtall;
+      souls();
+      objects();
+      mfdsetup = mfd3;
+      mfd();
+  }
+}
+
+function armoryupgrade() {
+  if(soulsAmount >= assets.soulsupgrade && uraniumAmount >= assets.uraniumupgrade) {
+    soulsAmount += assets.amount * assets.metal;
+    uraniumAmount += -assets.uraniumupgrade;
+    assets.amount = 0;
+    soulsAmount += -assets.soulsupgrade;
+    assets.metal = assets.metal * 1.5;
+    assets.oil = assets.oil * 1.5;
+    assets.uranium = assets.uranium * 1.5;
+    assets.level ++;
+    assets.souls = assets.souls * assets.upgrade;
+    assets.soulsupgrade = assets.soulsupgrade * exponentialtall;
+    assets.uraniumupgrade = assets.uraniumupgrade * exponentialtall;
+    souls();
+    objects();
+    mfdsetup = mfd3;
+    mfd();
+  }
+}
+
+function purchasefun2() {
+  if (soulsAmount >= assets.souls) {
+    assets.amount ++;
+    soulsAmount += -assets.souls;
+    assets.souls = assets.souls * increasevar;
+    objects();
+    souls();
+    mfdsetup = mfd2; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
+    mfd();
+  }
+}
+
+function purchasefun() {
+  if(!clickmax) {
+    for (var i = 0; i < clickAmount; i++) {
+      if (metalAmount >= assets.metal && oilAmount >= assets.oil && uraniumAmount >= assets.uranium) {
+        assets.amount ++;
+        metalAmount += -assets.metal;
+        oilAmount += -assets.oil;
+        uraniumAmount += -assets.uranium;
+        objects();
+        resources();
+        mfdsetup = mfd1; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
+        mfd();
+      }
+    }
+  }
+  if (clickmax) {
+    if (assets.uranium == 0) {
+      maxtimes =  Math.min(Math.floor(metalAmount / assets.metal), Math.floor(oilAmount / assets.oil));
+      assets.amount += maxtimes;
+      metalAmount += -assets.metal * maxtimes;
+      oilAmount += -assets.oil * maxtimes;
+      objects();
+      resources();
+      mfdsetup = mfd1; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
+      mfd();
+    }
+    else{
+      maxtimes =  Math.min(Math.floor(metalAmount / assets.metal), Math.floor(oilAmount / assets.oil), Math.floor(uraniumAmount / assets.uranium));
+      assets.amount += maxtimes;
+      metalAmount += -assets.metal * maxtimes;
+      oilAmount += -assets.oil * maxtimes;
+      uraniumAmount += -assets.uranium * maxtimes;
+      objects();
+      resources();
+      mfdsetup = mfd1; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
+      mfd();
+    }
+  }
+}
+
+function stats() {
+  assets = type;
+  objects();
+  mfdsetup = mfd4;
+  mfd();
+  mfd4checkfun();
+}
+
+function mfd4checkfun() {
+  mfd1check = false;
+  mfd2check = false;
+  mfd3check = false;
+  mfd4check = true;
+  mfd5check = false;
+  mfd6check = false;
+  mfd7check = false;
+  mfd8check = false;
+}
+
+function mfd5checkfun() {
+  mfd1check = false;
+  mfd2check = false;
+  mfd3check = false;
+  mfd4check = false;
+  mfd5check = true;
+  mfd6check = false;
+  mfd7check = false;
+  mfd8check = false;
+}
+
+function pinkbookfun() {
+  document.body.style.backgroundImage = "url('bilder/backgroundv9page" + bookpage + ".png')";
+  document.getElementById("pinkbook").style.display = "none";
+  document.getElementById("close").style.display = "block";
+  if (bookpage == 1) {
+    document.getElementById("nextpage").style.display = "block";
+  }
+  if (bookpage == 5) {
+    document.getElementById("previouspage").style.display = "block";
+  }
+  if (bookpage > 1 && bookpage < 5) {
+    document.getElementById("previouspage").style.display = "block";
+    document.getElementById("nextpage").style.display = "block";
+  }
+}
+
+function nextpagefun() {
+  bookpage++;
+  document.body.style.backgroundImage = "url('bilder/backgroundv9page" + bookpage + ".png')";
+  if (bookpage == 2) {
+    document.getElementById("previouspage").style.display = "block";
+  }
+  if (bookpage == 5) {
+    document.getElementById("nextpage").style.display = "none";
+  }
+}
+
+function previouspagefun() {
+  bookpage += -1;
+  document.body.style.backgroundImage = "url('bilder/backgroundv9page" + bookpage + ".png')";
+  if (bookpage == 1) {
+    document.getElementById("previouspage").style.display = "none";
+  }
+  if (bookpage == 4) {
+    document.getElementById("nextpage").style.display = "block";
+  }
+}
+
+function closefun() {
+  document.body.style.backgroundImage = "url('bilder/backgroundv8.png')";
+  document.getElementById("previouspage").style.display = "none";
+  document.getElementById("close").style.display = "none";
+  document.getElementById("nextpage").style.display = "none";
+  document.getElementById("pinkbook").style.display = "block";
+}
+
+
+function bigredclick() {
+  document.getElementById("bigrediddown").style.display = "block";
+  document.getElementById("bigredidup").style.display = "none";
+  document.getElementById("bigreddiv").style.display = "none";
+  if (!end) {
+    assets = m1a2;
+    tempsouls += assets.amount*assets.souls;
+    assets.amount = 0;
+    assets = a10;
+    tempsouls += assets.amount*assets.souls;
+    assets.amount = 0;
+    assets = b52;
+    tempsouls += assets.amount*assets.souls;
+    assets.amount = 0;
+    assets = titan1;
+    tempsouls += assets.amount*assets.souls;
+    assets.amount = 0;
+    assets = lgm30;
+    tempsouls += assets.amount*assets.souls;
+    assets.amount = 0;
+    soulsupdate();
+    objects();
+    if(mfd1check) {
+      mfdsetup = mfd1; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
+      mfd();
+    }
+  }
+  setTimeout(function() {
+    document.getElementById("bigredidup").style.display = "block";
+    document.getElementById("bigrediddown").style.display = "none";
+    document.getElementById("bigreddiv").style.display = "block";
+  }, 1000);
+}
+
+function soulsupdate() {
+  if(tempsouls > 0) {
+    setTimeout(function() {
+      soulsAmount += tempsouls / soulsupdatepercent;
+      tempsouls = tempsouls - (tempsouls / soulsupdatepercent);
+      souls();
+      soulsupdate();
+      objects();
+      if(mfd1check) {
+        mfdsetup = mfd1; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
+      }
+      else if(mfd2check) {
+        mfdsetup = mfd2; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
+      }
+      else if(mfd3check) {
+        mfdsetup = mfd3; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
+      }
+      else if(mfd4check) {
+        mfdsetup = mfd4; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
+      }
+      else if(mfd5check) {
+        mfdsetup = mfd5; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
+      }
+      else if(mfd6check) {
+        mfdsetup = mfd6; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
+      }
+      mfd();
+    }, 1000 / soulsupdateint);
+  }
+}
+
+function souls() {
+  document.getElementById("soulstekstid").innerHTML =
+     "SOULS " + "<br>" +
+     Number.parseFloat(soulsAmount).toExponential(2);
+}
+
+function resources() {
+  if (!end) {
+    document.getElementById("resourcestekstid").innerHTML =
+      "RESOURCES " + "<br>" +
+      "<br>" +
+      "METAL " + "<br>" +
+      "OIL " + "<br>" +
+      "URANIUM ";
+    document.getElementById("resourcestekstid2").innerHTML =
+      "<br>" +
+      "<br>" +
+      "| " + Number.parseFloat(metalAmount).toExponential(2) + "<br>" +
+      "| " + Number.parseFloat(oilAmount).toExponential(2) + "<br>" +
+      "| " + Number.parseFloat(uraniumAmount).toExponential(2);
+  }
+}
+
+function mfd() {
+  document.getElementById("mfdtopleft").innerHTML =
+    mfdsetup.leftline1;
+  document.getElementById("mfdcenter").innerHTML =
+    mfdsetup.center + "<br>" +
+    "<br>" +
+    "<br>" +
+    "<br>" +
+    "<br>" +
+    "<br>" +
+    "<br>" +
+    mfdsetup.centerbottom;
+  document.getElementById("mfdleft").innerHTML =
+    mfdsetup.leftline2 + "<br>" +
+    mfdsetup.leftline3 + "<br>" +
+    mfdsetup.leftline4 + "<br>" +
+    mfdsetup.leftline5 + "<br>" +
+    mfdsetup.leftline6 + "<br>" +
+    mfdsetup.leftline7 + "<br>" +
+    mfdsetup.leftlinestat;
+  document.getElementById("mfdbottomleft").innerHTML =
+    "<br>" +
+    "<br>" +
+    "<br>" +
+    "<br>" +
+    "<br>" +
+    "<br>" +
+    "<br>" +
+    mfdsetup.leftline8;
+  document.getElementById("mfdtopright").innerHTML =
+    mfdsetup.rightline1;
+  document.getElementById("mfdright").innerHTML =
+    mfdsetup.rightline2 + "<br>" +
+    mfdsetup.rightline3 + "<br>" +
+    mfdsetup.rightline4 + "<br>" +
+    mfdsetup.rightline5 + "<br>" +
+    mfdsetup.rightline6 + "<br>" +
+    mfdsetup.rightline7 + "<br>" +
+    mfdsetup.rightlinestat;
+  document.getElementById("mfdbottomright").innerHTML =
+    "<br>" +
+    "<br>" +
+    "<br>" +
+    "<br>" +
+    "<br>" +
+    "<br>" +
+    "<br>" +
+    mfdsetup.rightline8;
+}
+/*
+
+
+*/
+//All under is clock:
+setInterval(setClock,1000);
+const hourHand = document.querySelector('[data-hour-hand]');
+const minuteHand = document.querySelector('[data-minute-hand]');
+const secondHand = document.querySelector('[data-second-hand]');
+
+
+
+function setClock() {
+  const currenDate = new Date();
+  const secondsRatio = currenDate.getSeconds() / 60;
+  const minutesRatio = (secondsRatio + currenDate.getMinutes()) / 60;
+  const hoursRatio = (minutesRatio + currenDate.getHours()) / 12;
+  setRotation(secondHand, secondsRatio);
+  setRotation(minuteHand, minutesRatio);
+  setRotation(hourHand, hoursRatio);
+}
+
+function setRotation(element, rotationRatio) {
+  element.style.setProperty('--rotere', rotationRatio * 360);
+}
+
+function armageddonclick() {
+  if (!armageddonfun) {
+    armageddonfun = true;
+    armageddon();
+  }
+}
+
+function armageddon() {
+setTimeout(function() {
+  var i = 0;
+  end = true;
+  forFunkaIkke();
+  function forFunkaIkke() {
+    setTimeout(function() {
+      let mfdend = new MfdSetup("||ALERT||", "THE BUNKER HAS BEEN BREACHED.", "COMMAND TRANSFERED TO THE V.P." , "YOUR TASK HAS BEEN TERMINATED.", "ESTIMATED TIME UNTIL DEATH: ", "", "GOOD LUCK MR. PRESIDENT...", "TIME IS THE ENEMY.", "|LOCATION COMPROMISED.", "", "", "", "", "[" + countdown + " SECONDS]", "", "", "", "", "", "");
+      mfdsetup = mfdend;
+      mfdtaskcheck = false;
+      mfd1check = false;
+      mfd2check = false;
+      mfd3check = false;
+      mfd4check = false;
+      mfd5check = false;
+      mfd6check = false;
+      mfd7check = false;
+      mfd8check = false;
+      mfd();
+      countdown += -1;
+      i++;
+      if (i < 21) {
+        forFunkaIkke();
+      }
+    }, 1000)
+  }
+  setTimeout(function() {
+    document.getElementById("deathgif").style.display = "block";
+  }, 25000);
+}, 60000);
+}
+</script>
