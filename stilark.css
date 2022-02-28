@@ -23,7 +23,6 @@ body{
   top: 10.1%;
   left: 37.1%;
   font-size: 10%;
-  background-color:blue;
 }
 .square2 {
   padding-top: 6.1%; /* Aspect Ratio */
@@ -217,6 +216,7 @@ body{
 #osb1{
   top: 7.8%;
   left: 40.5%;
+  background-color: blue;
 }
 #osb2{
   top: 7.8%;
