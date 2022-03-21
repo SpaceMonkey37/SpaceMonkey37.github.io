@@ -9,7 +9,7 @@ div {
 }
 body{
   background-color: black;
-   background-image: url("bilder/backgroundv9.png");
+   background-imagee: url("bilder/backgroundv9.png");
    background-size: cover;
    min-width: 100%;
    font-family: 'Chakra Petch', sans-serif;
@@ -52,6 +52,17 @@ body{
 }
 .osb:hover {
   cursor: pointer;
+}
+.osb:active {
+  background-color: #50545c;
+  opacity: 50%;
+}
+#manual {
+  padding-top: 0%; /* Aspect Ratio */
+  width: 100%;
+  position: absolute;
+  top: 0%;
+  left: 0%;
 }
 #previouspage {
   padding-top: 1.6%; /* Aspect Ratio */

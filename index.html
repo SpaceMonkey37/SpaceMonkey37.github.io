@@ -15,6 +15,7 @@
     </head>
     <img id="deathgif" src="bilder/death.gif">
     <div class="container">
+      <img id="manual" src="bilder/backgroundv9.png" >
       <img id="bigredidup" src="bilder/bigred.png" >
       <img id="bigrediddown" src="bilder/bigred.png">
       <img id="clockblood" src="bilder/clockblood.png">
@@ -79,26 +80,24 @@ document.querySelectorAll("button").forEach( function(item) {
   })
 })
 
-var persek = 100;
-var end = false;
-var clickAmount = 1;
-var soulsAmount = 0;
-var metalAmount = 0;
-var oilAmount = 0;
-var uraniumAmount = 0;
-var countdown = 20;
-var minerigang = false;
-var oilpumpigang = false;
-var drilligang = false;
-var oilrigigang = false;
-var uminerigang = false;
-var armageddonfun = false;
-var clickmax = false;
-var type = 0;
-var tempsouls = 0;
-var maxtimes = 0;
-var bookpage = 1;
-var mfd1check=false;
+var persek = 100; //Antall ganger assets funksjonen kjører per sekund. Gjør også at ressursene per sekund er alltid lik.
+var end = false; //stopper spillet når end = true
+var clickAmount = 1; //variable for antall armory units man kjøper per click.
+var soulsAmount = 0; //hvor mange souls man har
+var metalAmount = 0; //hvor mye metal man har
+var oilAmount = 0; //hvor mye oil man har.
+var uraniumAmount = 0; //hvor mye uranium man har
+var countdown = 20; //hvor lang tid
+var countdown2 = countdown; //klone av det originale oppsettet til countdown
+var uminerigang = false; //variabel for å vite om uminer funksjons loopen kjører eller ikke.
+var loopigang = false; //variabel for å vite om loop() kjører eller ikke.
+var armageddonfun = false; //variabel for å vite om armageddonclick() har blitt trykket på eller ikke.
+var clickmax = false; //variabel for å vite om du har trykket på MAX på extra skjermen.
+var type = 0; //variabel for type til armory units
+var tempsouls = 0; //en midlertidig variabel for souls som enda ikke har blitt overført til soulsAmount.
+var maxtimes = 0; //maksimalt antall ganger du kan kjøre en funksjon.
+var bookpage = 1; //Hvilken side av den rosa boken du er på.
+var mfd1check=false; //
 var mfd2check=false;
 var mfd3check=false;
 var mfd4check=false;
@@ -119,17 +118,17 @@ var soulsupdateint = 1000; //antall soulsupdates per sekund
 var upgradeprice = 4;
 
 
-let m1a2 = new Assets("M1A2" /*assetType*/, 0 /*amount, default 0*/, 0 /*leve, default 0l*/, 8 /*souls,lethality/price*/, 81  /*PRICEmetal*/, 47 /*PRICEoil*/, 0 /*PRICEuranium*/, 160 * upgradeprice /*soulsUpgradeCost*/, 8 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/);
-let a10 = new Assets("A-10" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 26 /*souls,lethality/price*/, 67  /*PRICEmetal*/, 134 /*PRICEoil*/, 0 /*PRICEuranium*/, 190 * upgradeprice /*soulsUpgradeCost*/, 10 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/);
-let b52 = new Assets("B-52" /*assetType*/, 0 /*amount, default 0*/, 0 /*leve, default 0l*/, 840 /*souls,lethality/price*/, 1800  /*PRICEmetal*/, 2500 /*PRICEoil*/, 0 /*PRICEuranium*/, 3700 * upgradeprice /*soulsUpgradeCost*/,  180 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/);
-let titan1 = new Assets("TITAN I" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 5000 /*souls,lethality/price*/, 8700  /*PRICEmetal*/, 9876 /*PRICEoil*/, 300 /*PRICEuranium*/, 15632 * upgradeprice /*soulsUpgradeCost*/, 750 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/);
-let lgm30 = new Assets("LGM-30" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 30000 /*souls,lethality/price*/, 26231  /*PRICEmetal*/, 25631 /*PRICEoil*/, 1800 /*PRICEuranium*/, 49871 * upgradeprice /*soulsUpgradeCost*/, 2500 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/);
+let m1a2 = new Assets("M1A2" /*assetType*/, 0 /*amount, default 0*/, 0 /*leve, default 0l*/, 8 /*souls,lethality/price*/, 81  /*PRICEmetal*/, 47 /*PRICEoil*/, 0 /*PRICEuranium*/, 160 * upgradeprice /*soulsUpgradeCost*/, 8 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/, 0, 0);
+let a10 = new Assets("A-10" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 26 /*souls,lethality/price*/, 67  /*PRICEmetal*/, 134 /*PRICEoil*/, 0 /*PRICEuranium*/, 190 * upgradeprice /*soulsUpgradeCost*/, 10 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/, 0, 0);
+let b52 = new Assets("B-52" /*assetType*/, 0 /*amount, default 0*/, 0 /*leve, default 0l*/, 840 /*souls,lethality/price*/, 1800  /*PRICEmetal*/, 2500 /*PRICEoil*/, 0 /*PRICEuranium*/, 3700 * upgradeprice /*soulsUpgradeCost*/,  180 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/, 0, 0);
+let titan1 = new Assets("TITAN I" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 5000 /*souls,lethality/price*/, 8700  /*PRICEmetal*/, 9876 /*PRICEoil*/, 300 /*PRICEuranium*/, 15632 * upgradeprice /*soulsUpgradeCost*/, 750 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/, 0, 0);
+let lgm30 = new Assets("LGM-30" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 30000 /*souls,lethality/price*/, 26231  /*PRICEmetal*/, 25631 /*PRICEoil*/, 1800 /*PRICEuranium*/, 49871 * upgradeprice /*soulsUpgradeCost*/, 2500 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/, 0, 0);
 
-let miner = new Assets("MINER" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 10 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 160 * upgradeprice /*soulsUpgradeCost*/, 8 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "METAL" /*harvest type*/, 1 /*amount gathered per sec*/);
-let oilpump = new Assets("OIL-PUMP" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 15 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 228 * upgradeprice /*soulsUpgradeCost*/, 11 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "OIL" /*harvest type*/, 1 /*amount gathered per sec*/);
-let drill = new Assets("DRILL" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 22 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 402 * upgradeprice /*soulsUpgradeCost*/, 20 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "METAL" /*harvest type*/, 3 /*amount gathered per sec*/);
-let oilrig = new Assets("OIL-RIG" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 32 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 521 * upgradeprice /*soulsUpgradeCost*/, 260 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "OIL" /*harvest type*/, 3 /*amount gathered per sec*/);
-let uminer = new Assets("U-MINER" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 50 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 871 * upgradeprice /*soulsUpgradeCost*/, 450 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "URANIUM" /*harvest type*/, 1 /*amount gathered per sec*/);
+let miner = new Assets("MINER" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 10 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 160 * upgradeprice /*soulsUpgradeCost*/, 8 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "METAL" /*harvest type*/, 1 /*amount gathered per sec*/, 0, 0);
+let oilpump = new Assets("OIL-PUMP" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 15 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 228 * upgradeprice /*soulsUpgradeCost*/, 11 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "OIL" /*harvest type*/, 1 /*amount gathered per sec*/, 0, 0);
+let drill = new Assets("DRILL" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 22 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 402 * upgradeprice /*soulsUpgradeCost*/, 20 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "METAL" /*harvest type*/, 3 /*amount gathered per sec*/, 0, 0);
+let oilrig = new Assets("OIL-RIG" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 32 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 521 * upgradeprice /*soulsUpgradeCost*/, 260 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "OIL" /*harvest type*/, 3 /*amount gathered per sec*/, 0, 0);
+let uminer = new Assets("U-MINER" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 50 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 871 * upgradeprice /*soulsUpgradeCost*/, 450 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "URANIUM" /*harvest type*/, 1 /*amount gathered per sec*/, 0, 0);
 
 assets = m1a2;
 
@@ -157,11 +156,21 @@ function objects() {
 mfdsetup = mfdtask;
 mfdtaskcheck = true;
 
-
 souls();
 resources();
 mfd();
 timesince();
+
+function loop(){
+  miner.idle();
+  oilpump.idle();
+  drill.idle();
+  oilrig.idle();
+  setTimeout(function(){
+    loop();
+  }, 1000/persek);
+}
+
 
 function timesince() {
   setTimeout(function() {
@@ -181,62 +190,6 @@ function timesince() {
     }
     timesince();
   }, 1000);
-}
-
-function minerfun() {
-  if (!end) {
-    if(miner.amount > 0) {
-      minerigang = true;
-      setTimeout(function() {
-        metalAmount += (miner.efficiency / persek) * miner.amount;
-        objects();
-        resources();
-        minerfun();
-      }, 1000/persek);
-    }
-  }
-}
-
-function oilpumpfun() {
-  if (!end) {
-    if(oilpump.amount > 0) {
-      oilpumpigang = true;
-      setTimeout(function() {
-        oilAmount += (oilpump.efficiency / persek) * oilpump.amount;
-        objects();
-        resources();
-        oilpumpfun();
-      }, 1000/persek);
-    }
-  }
-}
-
-function drillfun() {
-  if (!end) {
-    if(drill.amount > 0) {
-      drilligang = true;
-      setTimeout(function() {
-        metalAmount += (drill.efficiency / persek) * drill.amount;
-        objects();
-        resources();
-        drillfun();
-      }, 1000/persek);
-    }
-  }
-}
-
-function oilrigfun() {
-  if (!end) {
-    if(oilrig.amount > 0) {
-      oirigigang = true;
-      setTimeout(function() {
-        oilAmount += (oilrig.efficiency / persek) * oilrig.amount;
-        objects();
-        resources();
-        oilrigfun();
-      }, 1000/persek);
-    }
-  }
 }
 
 function uminerfun() {
@@ -379,8 +332,9 @@ function osb8fun() {
       assets = miner;
       if (soulsAmount >= assets.souls) {
         purchasefun2();
-        if (!minerigang) {
-          minerfun();
+        if (!loopigang) {
+          loop();
+          loopigang = true;
         }
       }
     }
@@ -407,8 +361,9 @@ function osb9fun() {
       assets = oilpump;
       if (soulsAmount >= assets.souls) {
         purchasefun2();
-        if (!oilpumpigang) {
-          oilpumpfun();
+        if (!loopigang) {
+          loop();
+          loopigang = true;
         }
       }
     }
@@ -439,8 +394,9 @@ function osb10fun() {
       assets = drill;
       if (soulsAmount >= assets.souls) {
         purchasefun2();
-        if (!drilligang) {
-          drillfun();
+        if (!loopigang) {
+          loop();
+          loopigang = true;
         }
       }
     }
@@ -471,8 +427,9 @@ function osb11fun() {
       assets = oilrig;
       if (soulsAmount >= assets.souls) {
         purchasefun2();
-        if (!oilrigigang) {
-          oilrigfun();
+        if (!loopigang) {
+          loop();
+          loopigang = true;
         }
       }
     }
@@ -796,7 +753,7 @@ function mfd5checkfun() {
 }
 
 function pinkbookfun() {
-  document.body.style.backgroundImage = "url('bilder/backgroundv9page" + bookpage + ".png')";
+  document.getElementById("manual").src="bilder/backgroundv9page" + bookpage + ".png";
   document.getElementById("pinkbook").style.display = "none";
   document.getElementById("close").style.display = "block";
   if (bookpage == 1) {
@@ -813,7 +770,7 @@ function pinkbookfun() {
 
 function nextpagefun() {
   bookpage++;
-  document.body.style.backgroundImage = "url('bilder/backgroundv9page" + bookpage + ".png')";
+  document.getElementById("manual").src="bilder/backgroundv9page" + bookpage + ".png";
   if (bookpage == 2) {
     document.getElementById("previouspage").style.display = "block";
   }
@@ -824,7 +781,7 @@ function nextpagefun() {
 
 function previouspagefun() {
   bookpage += -1;
-  document.body.style.backgroundImage = "url('bilder/backgroundv9page" + bookpage + ".png')";
+  document.getElementById("manual").src="bilder/backgroundv9page" + bookpage + ".png";
   if (bookpage == 1) {
     document.getElementById("previouspage").style.display = "none";
   }
@@ -834,7 +791,7 @@ function previouspagefun() {
 }
 
 function closefun() {
-  document.body.style.backgroundImage = "url('bilder/backgroundv8.png')";
+  document.getElementById("manual").src="bilder/backgroundv9.png";
   document.getElementById("previouspage").style.display = "none";
   document.getElementById("close").style.display = "none";
   document.getElementById("nextpage").style.display = "none";
@@ -1033,14 +990,14 @@ setTimeout(function() {
       mfd();
       countdown += -1;
       i++;
-      if (i < 21) {
+      if (i < countdown2 + 1) {
         forFunkaIkke();
       }
     }, 1000)
   }
   setTimeout(function() {
     document.getElementById("deathgif").style.display = "block";
-  }, 25000);
+  }, countdown * 1000 + 5000);
 }, 60000);
 }
 </script>
