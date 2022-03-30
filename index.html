@@ -64,7 +64,6 @@
       <div id="previouspage" onclick="previouspagefun();"></div>
       <div id="close" onclick="closefun();"></div>
       <div id="nextpage" onclick="nextpagefun();"></div>
-
     </div>
   </body>
 </html>
@@ -94,10 +93,14 @@ var loopigang = false; //variabel for å vite om loop() kjører eller ikke.
 var armageddonfun = false; //variabel for å vite om armageddonclick() har blitt trykket på eller ikke.
 var clickmax = false; //variabel for å vite om du har trykket på MAX på extra skjermen.
 var type = 0; //variabel for type til armory units
+var n = 0; //variabel for hvor mange units du kan kjøpe
+var sumPrice = 0; //Hvor dyrt det er å kjøpe n mange units
 var tempsouls = 0; //en midlertidig variabel for souls som enda ikke har blitt overført til soulsAmount.
 var maxtimes = 0; //maksimalt antall ganger du kan kjøre en funksjon.
 var bookpage = 1; //Hvilken side av den rosa boken du er på.
-var mfd1check=false; //
+
+//brukes til å sjekke hvilken MFD side som er aktiv. Likt for de andre.
+var mfd1check=false;
 var mfd2check=false;
 var mfd3check=false;
 var mfd4check=false;
@@ -106,6 +109,7 @@ var mfd6check=false;
 var mfd7check=false;
 var mfd8check=false;
 
+//setter opp klokka i MFDtask
 var hours = 2;
 var minutes = 54;
 var seconds = 21;
@@ -115,9 +119,9 @@ var exponentialtall = 2; //, hvor mye dyrer oppgraderinger blir.
 var increasevar = 1.5; //hvor mange ganger dyrere personnel blir per amount
 var soulsupdatepercent = 30000; //hvor mye av tempsouls som skal bli overført hver soulsupdate, større tall betyr lengere telletid.
 var soulsupdateint = 1000; //antall soulsupdates per sekund
-var upgradeprice = 4;
+var upgradeprice = 4; //en global multipier for å endre hvor mye upgraderinger koster.
 
-
+//setter opp assets objektene
 let m1a2 = new Assets("M1A2" /*assetType*/, 0 /*amount, default 0*/, 0 /*leve, default 0l*/, 8 /*souls,lethality/price*/, 81  /*PRICEmetal*/, 47 /*PRICEoil*/, 0 /*PRICEuranium*/, 160 * upgradeprice /*soulsUpgradeCost*/, 8 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/, 0, 0);
 let a10 = new Assets("A-10" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 26 /*souls,lethality/price*/, 67  /*PRICEmetal*/, 134 /*PRICEoil*/, 0 /*PRICEuranium*/, 190 * upgradeprice /*soulsUpgradeCost*/, 10 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/, 0, 0);
 let b52 = new Assets("B-52" /*assetType*/, 0 /*amount, default 0*/, 0 /*leve, default 0l*/, 840 /*souls,lethality/price*/, 1800  /*PRICEmetal*/, 2500 /*PRICEoil*/, 0 /*PRICEuranium*/, 3700 * upgradeprice /*soulsUpgradeCost*/,  180 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, 0 /*harvest type*/, 0 /*amount gathered per sec*/, 0, 0);
@@ -130,9 +134,11 @@ let drill = new Assets("DRILL" /*assetType*/, 0 /*amount, default 0*/, 0 /*level
 let oilrig = new Assets("OIL-RIG" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 32 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 521 * upgradeprice /*soulsUpgradeCost*/, 260 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "OIL" /*harvest type*/, 3 /*amount gathered per sec*/, 0, 0);
 let uminer = new Assets("U-MINER" /*assetType*/, 0 /*amount, default 0*/, 0 /*level, default 0*/, 50 /*souls,lethality/price*/, 0  /*PRICEmetal*/, 0 /*PRICEoil*/, 0 /*PRICEuranium*/, 871 * upgradeprice /*soulsUpgradeCost*/, 450 * upgradeprice * 2 /*uraniumUpgradeCost*/, 2 /* upgrade improvement*/, "URANIUM" /*harvest type*/, 1 /*amount gathered per sec*/, 0, 0);
 
+
+//Assets må være deffinert før funksjon "objects".
 assets = m1a2;
 
-
+//Setter opp MFD objekter, dette er ikke deres faktiske verdier, men fordi verdiene deres hele tiden kan bli oppdatert må de først defineres utenfor objects() funksjonen.
 let mfd1 = 0;
 let mfd2 = 0;
 let mfd3 = 0;
@@ -141,6 +147,7 @@ let mfd5 = 0;
 let mfd6 = 0;
 let mfdtask = 0;
 
+//setter opp og oppdaterer MFD objektene slik at de har riktige verdier.
 objects();
 function objects() {
   mfd1 = new MfdSetup("ARMORY", "SOULS: " + parseFloat(soulsAmount).toFixed(0), "- " + m1a2.assetType + ": " + m1a2.amount, "- " + a10.assetType + ": " + a10.amount, "- " + b52.assetType + ": " + b52.amount, "- " + titan1.assetType + ": " + titan1.amount, "- " + lgm30.assetType + ": " + lgm30.amount, "ARSENAL", "PERSONNEL", "", m1a2.assetType + "(LVL" + (m1a2.level) + ")" + " -", a10.assetType + "(LVL" + (a10.level) + ")" + " -", b52.assetType + "(LVL" + (b52.level) + ")" + " -", titan1.assetType + "(LVL" + (titan1.level) + ")" + " -", lgm30.assetType + "(LVL" + (lgm30.level) + ")" + " -", "PURCHASE", "TASK&emsp;EXTRA", "", "", "ARMORY");
@@ -148,19 +155,22 @@ function objects() {
   mfd3 = new MfdSetup("ARMORY", "SOULS: " + parseFloat(soulsAmount).toFixed(0), "- " + m1a2.assetType + "(LVL" + (m1a2.level) + ")", "- " + a10.assetType + "(LVL" + (a10.level) + ")", "- " + b52.assetType + "(LVL" + (b52.level) + ")", "- " + titan1.assetType + "(LVL" + (titan1.level) + ")", "- " + lgm30.assetType + "(LVL" + (lgm30.level) + ")", "ARMORY", "PERSONNEL", "", miner.assetType + "(LVL" + (miner.level) + ")" + " -", oilpump.assetType + "(LVL" + (oilpump.level) + ")" + " -", drill.assetType + "(LVL" + (drill.level) + ")" + " -", oilrig.assetType + "(LVL" + (oilrig.level) + ")" + " -", uminer.assetType + "(LVL" + (uminer.level) + ")" + " -", "PERSONNEL", "TASK&emsp;EXTRA", "", "", "UPGRADES");
   mfd4 = new MfdSetup("ARMORY", "SOULS: " + parseFloat(soulsAmount).toFixed(0), "- RETURN", "LETHALITY: " + Number.parseFloat(assets.souls).toExponential(2), "UNIT COST:", "METAL " + Number.parseFloat(assets.metal).toExponential(2), "OIL " + Number.parseFloat(assets.oil).toExponential(2), "", "PERSONNEL", "", "UPGRADE COST (LVL" + (assets.level + 1) + "):", "SOULS " + Number.parseFloat(assets.soulsupgrade).toExponential(2), "URANIUM " + Number.parseFloat(assets.uraniumupgrade).toExponential(2), "", "LETHALITY (LVL" + (assets.level + 1) + "):", "", assets.assetType + "(LVL" + (assets.level) + ")", "URANIUM: " + Number.parseFloat(assets.uranium).toExponential(2), Number.parseFloat(assets.souls*assets.upgrade).toExponential(2), "");
   mfd5 = new MfdSetup("ARMORY", "SOULS: " + parseFloat(soulsAmount).toFixed(0), "- RETURN", "UNIT COST:", Number.parseFloat(assets.souls).toExponential(2) + " SOULS", "EFFICIENCY:", Number.parseFloat(assets.efficiency).toExponential(2) + " " + assets.harvest + " P/S", "P/S=PER SEC", "PERSONNEL", "", "UPGRADE COST (LVL" + (assets.level + 1) + "):", "SOULS " + Number.parseFloat(assets.soulsupgrade).toExponential(2), "URANIUM " + Number.parseFloat(assets.uraniumupgrade).toExponential(2), "", "EFFICIENCY (LVL" + (assets.level + 1) + "):", "", assets.assetType + "(LVL" + (assets.level) + ")", "", Number.parseFloat(assets.efficiency*assets.upgrade).toExponential(2) + " " + assets.harvest + " P/S", "");
-  mfd6 = new MfdSetup("ARMORY", "SOULS: " + parseFloat(soulsAmount).toFixed(0), "", "METAL PER CLICK:", Number.parseFloat(miner.efficiency * 10).toExponential(2), "OIL PER CLICK:", Number.parseFloat(oilpump.efficiency * 10).toExponential(2), "ARMORY UNIT COST +50% PER LVL.", "PERSONNEL", "", "ARMORY UNITS PER CLICK (" + clickAmount + "):", "1 -", "10 -", "100 -", "MAX -", "", "TASK&emsp;EXTRA", "", "", "");
+  mfd6 = new MfdSetup("ARMORY", "SOULS: " + parseFloat(soulsAmount).toFixed(0), "", "METAL PER CLICK:", Number.parseFloat(miner.efficiency * 10).toExponential(2), "OIL PER CLICK:", Number.parseFloat(oilpump.efficiency * 10).toExponential(2), "ARMORY UNIT COST +50% PER LVL.", "PERSONNEL", "", "UNITS PER CLICK (" + clickAmount + "):", "1 -", "10 -", "100 -", "MAX -", "", "TASK&emsp;EXTRA", "", "", "");
   mfd7 = new MfdSetup("ARMORY", "leftline2", "leftline3", "leftline4", "leftline5", "leftline6", "leftline7", "leftline8", "PERSONNEL", "rightline2", "rightline3", "rightline4", "rightline5", "rightline6", "rightline7", "rightline8", "center", "leftlinestat", "rightlinestat", "");
   mfdtask = new MfdSetup("ARMORY", "LOCATION: UNKNOWN", "INTEL: THE RUSSIAN NUCLEAR STRIKE HIT", "[" + hours + " HOURS - " + minutes + " MIUNTES - " + seconds + " SECONDS] AGO.", "ALL US CIVILIANS PERSUMED DEAD.", "TASK: RETALIATE WITH FORCE.", "GOOD LUCK MR. PRESIDENT.", "TIME IS THE ENEMY.", "PERSONNEL", "", "", "", "", "", "", "", "TASK&emsp;EXTRA", "", "", "");
 }
 
+//mfdtask er "default" siden.
 mfdsetup = mfdtask;
 mfdtaskcheck = true;
 
-souls();
+//setter opp og oppdaterer alle skjermene.
+soulsFun();
 resources();
 mfd();
 timesince();
 
+//fuksjon som går i loop slik at autoclickerne fungere som de skal.
 function loop(){
   miner.idle();
   oilpump.idle();
@@ -171,7 +181,7 @@ function loop(){
   }, 1000/persek);
 }
 
-
+// går i loop og lar klokken i Task mfd siden gå.
 function timesince() {
   setTimeout(function() {
     seconds ++;
@@ -192,6 +202,7 @@ function timesince() {
   }, 1000);
 }
 
+//Egen funksjon for uranium miner fordi det dør en etter 5 minutter.
 function uminerfun() {
   if (!end) {
     if (!uminerigang) {
@@ -212,6 +223,7 @@ function uminerfun() {
   }
 }
 
+//dreper en uranium miner hvert 5 minutt så lenge det er minst 1 uranium miner i livet.
 function uminerdeath() {
   setTimeout(function() {
     uminer.amount += -1;
@@ -233,6 +245,8 @@ function uminerdeath() {
     }
   }, 300000);
 }
+
+//funksjonene som kjører når du trykker på OSB'ene (Knappene går med klokka og starter med OSB1 på øverste horisontale rad til venstre.)
 
 function osb1fun() {
   if (!end) {
@@ -325,13 +339,12 @@ function osb7fun() {
 function osb8fun() {
   if (!end) {
     if (mfd1check) {
-      assets = m1a2;
-      purchasefun();
+      m1a2.purchasefun();
     }
     else if (mfd2check) {
       assets = miner;
       if (soulsAmount >= assets.souls) {
-        purchasefun2();
+        miner.purchasefun2();
         if (!loopigang) {
           loop();
           loopigang = true;
@@ -339,8 +352,7 @@ function osb8fun() {
       }
     }
     else if (mfd3check) {
-      assets = miner;
-      personnelupgrade();
+      miner.personnelupgrade();
     }
     else if (mfd6check) {
 
@@ -354,13 +366,12 @@ function osb8fun() {
 function osb9fun() {
   if (!end) {
     if (mfd1check) {
-      assets = a10;
-      purchasefun();
+      a10.purchasefun();
     }
     if (mfd2check) {
       assets = oilpump;
       if (soulsAmount >= assets.souls) {
-        purchasefun2();
+        oilpump.purchasefun2();
         if (!loopigang) {
           loop();
           loopigang = true;
@@ -368,8 +379,7 @@ function osb9fun() {
       }
     }
     else if (mfd3check) {
-      assets = oilpump;
-      personnelupgrade();
+      oilpump.personnelupgrade();
     }
     else if (mfd6check) {
       clickAmount = 1;
@@ -387,13 +397,12 @@ function osb9fun() {
 function osb10fun() {
   if (!end) {
     if (mfd1check) {
-      assets = b52;
-      purchasefun();
+      b52.purchasefun();
     }
     if (mfd2check) {
       assets = drill;
       if (soulsAmount >= assets.souls) {
-        purchasefun2();
+        drill.purchasefun2();
         if (!loopigang) {
           loop();
           loopigang = true;
@@ -401,8 +410,7 @@ function osb10fun() {
       }
     }
     else if (mfd3check) {
-      assets = drill;
-      personnelupgrade();
+      drill.personnelupgrade();
     }
     else if (mfd6check) {
       clickAmount = 10;
@@ -420,13 +428,12 @@ function osb10fun() {
 function osb11fun() {
   if (!end) {
     if (mfd1check) {
-      assets = titan1;
-      purchasefun();
+      titan1.purchasefun();
     }
     if (mfd2check) {
       assets = oilrig;
       if (soulsAmount >= assets.souls) {
-        purchasefun2();
+        oilrig.purchasefun2();
         if (!loopigang) {
           loop();
           loopigang = true;
@@ -434,8 +441,7 @@ function osb11fun() {
       }
     }
     else if (mfd3check) {
-      assets = oilrig;
-      personnelupgrade();
+      oilrig.personnelupgrade();
     }
     else if (mfd6check) {
       clickAmount = 100;
@@ -453,21 +459,19 @@ function osb11fun() {
 function osb12fun() {
   if (!end) {
     if (mfd1check) {
-      assets = lgm30;
-      purchasefun();
+      lgm30.purchasefun();
     }
     if (mfd2check) {
       assets = uminer;
       if (soulsAmount >= assets.souls) {
-        purchasefun2();
+        uminer.purchasefun2();
         if (!uminerigang) {
           uminerfun();
         }
       }
     }
     else if (mfd3check) {
-      assets = uminer;
-      personnelupgrade();
+      uminer.personnelupgrade();
     }
     else if (mfd6check) {
       clickAmount = "MAX";
@@ -512,8 +516,7 @@ function osb14fun() {
       mfd5checkfun();
     }
     else if (mfd3check) {
-      assets = lgm30;
-      armoryupgrade();
+      lgm30.armoryupgrade();
     }
     else if (mfd4check) {
 
@@ -538,8 +541,7 @@ function osb15fun() {
       mfd5checkfun();
     }
     else if (mfd3check) {
-      assets = titan1;
-      armoryupgrade();
+      titan1.armoryupgrade();
     }
     else if (mfd6check) {
 
@@ -564,8 +566,7 @@ function osb16fun() {
       mfd5checkfun();
     }
     else if (mfd3check) {
-      assets = b52;
-      armoryupgrade();
+      b52.armoryupgrade();
     }
     else if (mfd6check) {
 
@@ -590,8 +591,7 @@ function osb17fun() {
       mfd5checkfun();
     }
     else if (mfd3check) {
-      assets = a10;
-      armoryupgrade();
+      a10.armoryupgrade();
     }
     else if (mfd6check) {
 
@@ -616,8 +616,7 @@ function osb18fun() {
       mfd5checkfun();
     }
     else if (mfd3check) {
-      assets = m1a2;
-      armoryupgrade();
+      m1a2.armoryupgrade();
     }
     else if (mfd4check) {
       osb1fun();
@@ -632,93 +631,6 @@ function osb19fun() {
   if (!end) {
     oilAmount += oilpump.efficiency * 10;
     resources();
-  }
-}
-
-function personnelupgrade() {
-  if(soulsAmount >= assets.soulsupgrade && uraniumAmount >= assets.uraniumupgrade) {
-      soulsAmount += -assets.soulsupgrade;
-      uraniumAmount += -assets.uraniumupgrade;
-      assets.level ++;
-      assets.efficiency = assets.efficiency * assets.upgrade;
-      assets.soulsupgrade = assets.soulsupgrade * exponentialtall;
-      assets.uraniumupgrade = assets.uraniumupgrade * exponentialtall;
-      souls();
-      objects();
-      mfdsetup = mfd3;
-      mfd();
-  }
-}
-
-function armoryupgrade() {
-  if(soulsAmount >= assets.soulsupgrade && uraniumAmount >= assets.uraniumupgrade) {
-    soulsAmount += assets.amount * assets.metal;
-    uraniumAmount += -assets.uraniumupgrade;
-    assets.amount = 0;
-    soulsAmount += -assets.soulsupgrade;
-    assets.metal = assets.metal * 1.5;
-    assets.oil = assets.oil * 1.5;
-    assets.uranium = assets.uranium * 1.5;
-    assets.level ++;
-    assets.souls = assets.souls * assets.upgrade;
-    assets.soulsupgrade = assets.soulsupgrade * exponentialtall;
-    assets.uraniumupgrade = assets.uraniumupgrade * exponentialtall;
-    souls();
-    objects();
-    mfdsetup = mfd3;
-    mfd();
-  }
-}
-
-function purchasefun2() {
-  if (soulsAmount >= assets.souls) {
-    assets.amount ++;
-    soulsAmount += -assets.souls;
-    assets.souls = assets.souls * increasevar;
-    objects();
-    souls();
-    mfdsetup = mfd2; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
-    mfd();
-  }
-}
-
-function purchasefun() {
-  if(!clickmax) {
-    for (var i = 0; i < clickAmount; i++) {
-      if (metalAmount >= assets.metal && oilAmount >= assets.oil && uraniumAmount >= assets.uranium) {
-        assets.amount ++;
-        metalAmount += -assets.metal;
-        oilAmount += -assets.oil;
-        uraniumAmount += -assets.uranium;
-        objects();
-        resources();
-        mfdsetup = mfd1; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
-        mfd();
-      }
-    }
-  }
-  if (clickmax) {
-    if (assets.uranium == 0) {
-      maxtimes =  Math.min(Math.floor(metalAmount / assets.metal), Math.floor(oilAmount / assets.oil));
-      assets.amount += maxtimes;
-      metalAmount += -assets.metal * maxtimes;
-      oilAmount += -assets.oil * maxtimes;
-      objects();
-      resources();
-      mfdsetup = mfd1; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
-      mfd();
-    }
-    else{
-      maxtimes =  Math.min(Math.floor(metalAmount / assets.metal), Math.floor(oilAmount / assets.oil), Math.floor(uraniumAmount / assets.uranium));
-      assets.amount += maxtimes;
-      metalAmount += -assets.metal * maxtimes;
-      oilAmount += -assets.oil * maxtimes;
-      uraniumAmount += -assets.uranium * maxtimes;
-      objects();
-      resources();
-      mfdsetup = mfd1; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
-      mfd();
-    }
   }
 }
 
@@ -838,7 +750,7 @@ function soulsupdate() {
     setTimeout(function() {
       soulsAmount += tempsouls / soulsupdatepercent;
       tempsouls = tempsouls - (tempsouls / soulsupdatepercent);
-      souls();
+      soulsFun();
       soulsupdate();
       objects();
       if(mfd1check) {
@@ -864,7 +776,7 @@ function soulsupdate() {
   }
 }
 
-function souls() {
+function soulsFun() {
   document.getElementById("soulstekstid").innerHTML =
      "SOULS " + "<br>" +
      Number.parseFloat(soulsAmount).toExponential(2);
