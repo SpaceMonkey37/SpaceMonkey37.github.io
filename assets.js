@@ -122,6 +122,7 @@ class Assets {
         sumPrice = ((Math.pow(increasevar,n)) * this.souls - this.souls) / (increasevar - 1);
         this.amount += n;
         soulsAmount += -sumPrice;
+        this.souls += this.souls * Math.pow(increasevar, n) - this.souls;
       }
       objects();
       soulsFun();
