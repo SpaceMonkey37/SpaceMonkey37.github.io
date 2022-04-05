@@ -15,24 +15,24 @@ class Assets {
     this.variable1 = variable1;
     this.type = type;
     this.idle = function() {
+      //funksjonen som samler ressurser for autoclickere.
       if (!end) {
-        if(this.amount > 0) {
-          if (this==miner||this==drill) {
-            this.variable1 = metalAmount;
-          }
-          if (this==oilpump||this==oilrig) {
-            this.variable1 = oilAmount;
-          }
-          this.variable1 += (this.efficiency / persek) * this.amount;
-          if (this==miner||this==drill) {
-            metalAmount = this.variable1;
-          }
-          if (this==oilpump||this==oilrig) {
-            oilAmount = this.variable1;
-          }
-          objects();
-          resources();
+        //må finne ut av hvilke ressurs som skal bli samlet.
+        if (this==miner||this==drill) {
+          this.variable1 = metalAmount;
         }
+        if (this==oilpump||this==oilrig) {
+          this.variable1 = oilAmount;
+        }
+        this.variable1 += (this.efficiency / persek) * this.amount;
+        if (this==miner||this==drill) {
+          metalAmount = this.variable1;
+        }
+        if (this==oilpump||this==oilrig) {
+          oilAmount = this.variable1;
+        }
+        objects();
+        resources();
       }
     };
     this.personnelupgrade = function() {
@@ -50,6 +50,7 @@ class Assets {
       }
     };
     this.armoryupgrade = function() {
+      //skjekke om du har nokk ressurser
       if(soulsAmount >= this.soulsupgrade && uraniumAmount >= this.uraniumupgrade) {
         soulsAmount += this.amount * this.metal;
         uraniumAmount += -this.uraniumupgrade;
@@ -71,6 +72,7 @@ class Assets {
     this.purchasefun = function() {
       if(!clickmax) {
         for (var i = 0; i < clickAmount; i++) {
+          //skjekke om du har nokk ressurser
           if (metalAmount >= this.metal && oilAmount >= this.oil && uraniumAmount >= this.uranium) {
             this.amount ++;
             metalAmount += -this.metal;
@@ -84,27 +86,15 @@ class Assets {
         }
       }
       if (clickmax) {
-        if (this.uranium == 0) {
-          maxtimes =  Math.min(Math.floor(metalAmount / this.metal), Math.floor(oilAmount / this.oil));
-          this.amount += maxtimes;
-          metalAmount += -this.metal * maxtimes;
-          oilAmount += -this.oil * maxtimes;
-          objects();
-          resources();
-          mfdsetup = mfd1; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
-          mfd();
-        }
-        else{
-          maxtimes =  Math.min(Math.floor(metalAmount / this.metal), Math.floor(oilAmount / this.oil), Math.floor(uraniumAmount / this.uranium));
-          this.amount += maxtimes;
-          metalAmount += -this.metal * maxtimes;
-          oilAmount += -this.oil * maxtimes;
-          uraniumAmount += -this.uranium * maxtimes;
-          objects();
-          resources();
-          mfdsetup = mfd1; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
-          mfd();
-        }
+        maxtimes =  Math.min(Math.floor(metalAmount / this.metal), Math.floor(oilAmount / this.oil), Math.floor(uraniumAmount / this.uranium));
+        this.amount += maxtimes;
+        metalAmount += -this.metal * maxtimes;
+        oilAmount += -this.oil * maxtimes;
+        uraniumAmount += -this.uranium * maxtimes;
+        objects();
+        resources();
+        mfdsetup = mfd1; //nekter å oppdatere siden om jeg ikke gjentar at den er på mfd1 selv om den alerede er på mfd1, usikker kilde til feil.
+        mfd();
       }
     };
     this.purchasefun2 = function(){
@@ -118,7 +108,9 @@ class Assets {
         }
       }
       if (clickmax) {
+        //på grunn av at prisen går opp for hver gang du kjøper en autoclicker trenger man denne funksjonen for å regne ut n (antall autoclickere du kan kjøpe).
         n = Math.floor((Math.log(increasevar * soulsAmount - soulsAmount + this.souls) - Math.log(this.souls)) / Math.log(increasevar));
+        //du må også regne ut totalprisen for å kjøpe n antall autoclickere som du så trekker fra soulsAmount variablen.
         sumPrice = ((Math.pow(increasevar,n)) * this.souls - this.souls) / (increasevar - 1);
         this.amount += n;
         soulsAmount += -sumPrice;

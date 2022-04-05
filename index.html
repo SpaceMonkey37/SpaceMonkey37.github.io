@@ -343,6 +343,7 @@ function osb8fun() {
     }
     else if (mfd2check) {
       assets = miner;
+      //trenger å starte loop når du kjøper en autoclicker. Alternativt startet loopen på nettside oppstart.
       if (soulsAmount >= assets.souls) {
         miner.purchasefun2();
         if (!loopigang) {
@@ -634,6 +635,7 @@ function osb19fun() {
   }
 }
 
+//setter opp stats siden når du trykker på et våpen i armory siden. For stats til personnel ligger koden i OSBfun'ene.
 function stats() {
   assets = type;
   objects();
@@ -642,6 +644,7 @@ function stats() {
   mfd4checkfun();
 }
 
+//mfd check funksjonene viser hvilke side som er aktive. Over har jeg skrivd denne koden innafor if settninger for OSB knappene for de andre mfd checksa.
 function mfd4checkfun() {
   mfd1check = false;
   mfd2check = false;
@@ -664,6 +667,7 @@ function mfd5checkfun() {
   mfd8check = false;
 }
 
+//funksjonen når du trykker på boken.
 function pinkbookfun() {
   document.getElementById("manual").src="bilder/backgroundv9page" + bookpage + ".png";
   document.getElementById("pinkbook").style.display = "none";
@@ -680,6 +684,7 @@ function pinkbookfun() {
   }
 }
 
+//funksjonen for å bla til neste side i boken.
 function nextpagefun() {
   bookpage++;
   document.getElementById("manual").src="bilder/backgroundv9page" + bookpage + ".png";
@@ -691,6 +696,7 @@ function nextpagefun() {
   }
 }
 
+//funksjonen for å bla til forgje side i boken.
 function previouspagefun() {
   bookpage += -1;
   document.getElementById("manual").src="bilder/backgroundv9page" + bookpage + ".png";
@@ -702,6 +708,7 @@ function previouspagefun() {
   }
 }
 
+//funksjonen for å lokke boken.
 function closefun() {
   document.getElementById("manual").src="bilder/backgroundv9.png";
   document.getElementById("previouspage").style.display = "none";
@@ -710,7 +717,7 @@ function closefun() {
   document.getElementById("pinkbook").style.display = "block";
 }
 
-
+//funksjonen som kjører når du trykker på den store røde kanppen. Resetter antall våpen du har.
 function bigredclick() {
   document.getElementById("bigrediddown").style.display = "block";
   document.getElementById("bigredidup").style.display = "none";
@@ -745,6 +752,7 @@ function bigredclick() {
   }, 1000);
 }
 
+//gjør det mulig å strekke ut hvor raskt man får souls etter å ha trykket på den store røde knappen.
 function soulsupdate() {
   if(tempsouls > 0) {
     setTimeout(function() {
@@ -776,12 +784,14 @@ function soulsupdate() {
   }
 }
 
+//oppdaterer skjermen dedikert til souls.
 function soulsFun() {
   document.getElementById("soulstekstid").innerHTML =
      "SOULS " + "<br>" +
      Number.parseFloat(soulsAmount).toExponential(2);
 }
 
+//oppdaterer skjermen dedikert til ressurser
 function resources() {
   if (!end) {
     document.getElementById("resourcestekstid").innerHTML =
@@ -799,6 +809,7 @@ function resources() {
   }
 }
 
+//Oppdataterer hovedskjermen.
 function mfd() {
   document.getElementById("mfdtopleft").innerHTML =
     mfdsetup.leftline1;
@@ -848,18 +859,15 @@ function mfd() {
     "<br>" +
     mfdsetup.rightline8;
 }
-/*
 
 
-*/
-//All under is clock:
 setInterval(setClock,1000);
 const hourHand = document.querySelector('[data-hour-hand]');
 const minuteHand = document.querySelector('[data-minute-hand]');
 const secondHand = document.querySelector('[data-second-hand]');
 
 
-
+//setter opp klokken
 function setClock() {
   const currenDate = new Date();
   const secondsRatio = currenDate.getSeconds() / 60;
@@ -870,10 +878,12 @@ function setClock() {
   setRotation(hourHand, hoursRatio);
 }
 
+
 function setRotation(element, rotationRatio) {
   element.style.setProperty('--rotere', rotationRatio * 360);
 }
 
+//funksjonen som kjører når du trykker på klokken.
 function armageddonclick() {
   if (!armageddonfun) {
     armageddonfun = true;
